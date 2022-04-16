@@ -5,9 +5,11 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.*;
 
+@SuppressWarnings("serial")
 public class PageRankFenetre extends JFrame {
 
    public PageRankFenetre() {
+      
       super("IHM pour CLI");
 
       WindowListener listener = new WindowAdapter() {
@@ -16,59 +18,112 @@ public class PageRankFenetre extends JFrame {
          }
       };
 
-
       LayoutManager flowNorth = new FlowLayout();
       JPanel northPanel = new JPanel(flowNorth);
+
       JButton creuse = new JButton("CREUSE");
       JButton pleine = new JButton("PLEINE");
+
       northPanel.add(creuse);
       northPanel.add(pleine);
       
-      LayoutManager flowWest = new GridLayout(3,1);
-      JPanel westPanel = new JPanel(flowWest);
+      LayoutManager gridCenter = new GridLayout(3,3);
+      JPanel centerPanel = new JPanel(gridCenter);
+
       JLabel K = new JLabel("Valeur de l'indice (K)");
       JLabel A = new JLabel("Valeur de alpha (A)");
       JLabel E = new JLabel("Valeur de epsilon (E)");
-      westPanel.add(K);
-      westPanel.add(A);
-      westPanel.add(E);
       
-      LayoutManager flowCenter = new GridLayout(3,1);
-      JPanel centerPanel = new JPanel(flowCenter);
       JTextField KText = new JTextField("150");
       JTextField AText = new JTextField("0.85");
       JTextField EText = new JTextField("-1");
-      centerPanel.add(KText);
-      centerPanel.add(AText);
-      centerPanel.add(EText);
       
-      LayoutManager flowEast = new GridLayout(3,1);
-      JPanel eastPanel = new JPanel(flowEast);
       JButton addK = new JButton("+");
       JButton addA = new JButton("+");
       JButton addE = new JButton("+");
-      eastPanel.add(addK);
-      eastPanel.add(addA);
-      eastPanel.add(addE);
+      
+      centerPanel.add(K);
+      centerPanel.add(KText);
+      centerPanel.add(addK);
+
+      centerPanel.add(A);
+      centerPanel.add(AText);
+      centerPanel.add(addA);
+
+      centerPanel.add(E);
+      centerPanel.add(EText);
+      centerPanel.add(addE);
       
       LayoutManager flowSouth = new FlowLayout();
       JPanel southPanel = new JPanel(flowSouth);
-      JLabel result = new JLabel("utilisez les boutons pour ajouter des options");
+
+      JTextField result = new JTextField();
+
       southPanel.add(result);
       
       this.getContentPane().add(northPanel, BorderLayout.NORTH);
-
-      this.getContentPane().add(westPanel, BorderLayout.WEST);
-      
-      this.getContentPane().add(centerPanel, BorderLayout.CENTER);
-      
-      this.getContentPane().add(eastPanel, BorderLayout.EAST);
-      
+      this.getContentPane().add(centerPanel, BorderLayout.CENTER); 
       this.getContentPane().add(result, BorderLayout.SOUTH);
+      
+      creuse.addActionListener(new ActionListener () { 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addCPress(result);
+		}
+      });
+      
+      pleine.addActionListener(new ActionListener () { 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addPPress(result);
+		}
+      });
+      
+      addK.addActionListener(new ActionListener () { 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addKPress(KText, result);
+		}
+      });
+      
+      addA.addActionListener(new ActionListener () { 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addAPress(AText, result);
+		}
+      });
+      
+      addE.addActionListener(new ActionListener () { 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addEPress(EText, result);
+		}
+      });
       
       addWindowListener(listener);
       setSize(800,400);
       setVisible(true);
+      
+   }
+   
+   public void addPPress(JTextField result) {
+	   result.setText(result.getText() + " -P ");
+   }
+   
+   public void addCPress(JTextField result) {
+	   result.setText(result.getText() + " -C ");
+   }
+   
+   public void addKPress(JTextField KText, JTextField result) {
+	   result.setText(result.getText() + " -K " + KText.getText());
+   }
+   
+   public void addAPress(JTextField AText, JTextField result) {
+	   result.setText(result.getText() + " -A " + AText.getText());
+   }
+   
+   public void addEPress(JTextField EText, JTextField result) {
+	   result.setText(result.getText() + " -E " + EText.getText());
    }
 
    public static void main(String [] args){
